@@ -1,29 +1,11 @@
 from flask import Flask, render_template, jsonify, url_for, redirect,request,jsonify,session,flash
-from flask_bootstrap import Bootstrap
-from flask_nav import Nav
-from flask_nav.elements import *
-from dominate.tags import img
 from forms import ContactForm
 import pandas as pd
 import sqlite3
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
-###### Logo
-logo = img(src='./static/img/logo.svg',  height="45", width="45", style="margin-top:-15px" )
-###### Nav bar
-topbar = Navbar(logo,
-                View('Home', 'home'),
-                View('Apps', 'apps'),
-                View('Sign in', 'login'),
-                View('Sign up', 'register'),
-                View('Contact', 'get_contact'),
-)
-
-nav = Nav()
-nav.register_element('top', topbar)
 
 app = Flask(__name__)
-Bootstrap(app)
 app.secret_key = 'G34+yhc[W#%zfnfp_KRpL#9&3?iKq^'
 
 ##### db Connection
@@ -139,7 +121,5 @@ def get_contact():
     else:
         return render_template('contact.html', form=form)
 
-nav.init_app(app)
-
 if __name__ =='__main__':
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0')
