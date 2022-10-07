@@ -1,0 +1,15 @@
+{
+ "version":1,
+ "builds":[
+	{
+	  "src": "*.py",
+	  "use": "@pol-cova/lambda-api"
+	}
+	],
+ "routes": [
+	{
+	  "src": "(.*)",
+	  "dest": "wsgi.py"
+	}
+]
+}
