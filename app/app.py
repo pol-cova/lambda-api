@@ -6,9 +6,14 @@ import re
 from werkzeug.security import generate_password_hash, check_password_hash
 from io import BytesIO
 from pytube import YouTube
+import os
+
 
 app = Flask(__name__)
 app.secret_key = 'G34+yhc[W#%zfnfp_KRpL#9&3?iKq^'
+
+IMG_FOLDER = os.path.join('static', 'img')
+app.config['UPLOAD_FOLDER'] = IMG_FOLDER
 
 ##### db Connection
 def get_db_connection():
@@ -119,6 +124,12 @@ def get_contact():
     else:
         return render_template('contact.html', form=form)
 
+@app.route('/apps')
+def apps():
+    if 'loggedin' in session:
+        return render_template('app.html', username =session['username'])
+    return redirect(url_for('error_401'))
+
 @app.route('/yt-api', methods=['GET', 'POST'])
 def ytapi():
     return render_template('yt-api.html',
@@ -143,6 +154,16 @@ def ytdownload():
             return send_file(buffer, as_attachment=True, download_name="Video - {yt.title}.mp4", mimetype="video/mp4")
     return redirect(url_for('yt-api'))
 
+# Redirecting to sophia.edu
+@app.route('/sophia')
+def sophia_edu():
+    return redirect("https://sophia-edu.herokuapp.com", code=302)
+
+# List of errors
+@app.route('/401')
+def error_401():
+    error401_img = os.path.join(app.config['UPLOAD_FOLDER'], 'error401.jpg')
+    return render_template('error401.html', user_image = error401_img)
 
 if __name__ =='__main__':
     app.run(debug=True)
